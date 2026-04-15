@@ -40,7 +40,8 @@ export default function ComparePage({ params }: { params: Promise<{ medicineId: 
   useEffect(() => {
     const fetchCompare = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/compare/${medicineId}`);
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+        const res = await fetch(`${baseUrl}/api/compare/${medicineId}`);
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         

@@ -28,7 +28,8 @@ function SearchContent() {
       setIsLoading(true);
       setError("");
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/search?q=${encodeURIComponent(query)}`);
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+        const res = await fetch(`${baseUrl}/api/search?q=${encodeURIComponent(query)}`);
         if (!res.ok) throw new Error("Failed to fetch results");
         const data = await res.json();
         setResults(data);
