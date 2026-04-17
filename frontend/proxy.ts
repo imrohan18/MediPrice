@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Pass-through proxy: session refresh is handled in Server Components
   // via utils/supabase/server.ts. @supabase/ssr's createServerClient uses
   // Node.js crypto APIs incompatible with Vercel's Edge Runtime.
