@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from database import supabase
 
 router = APIRouter()
@@ -11,6 +11,10 @@ class Medicine(BaseModel):
     name: str
     strength: str
     pack_size: str
+    category: str
+    price: float
+    company: str
+    prescription_required: bool
 
 class PharmacyPrice(BaseModel):
     pharmacy_name: str
@@ -27,21 +31,39 @@ class CompareResult(BaseModel):
     prices: List[PharmacyPrice]
 
 
+@router.get("/categories", response_model=List[str])
+def get_categories():
+    # Fetch unique categories from Supabase
+    response = supabase.table("medicines").select("category").execute()
+    # Use a set to get unique values
+    categories = sorted(list(set(row["category"] for row in response.data if row.get("category"))))
+    return categories
+
+
 @router.get("/search", response_model=List[Medicine])
-def search_medicines(q: str):
-    response = (
-        supabase.table("medicines")
-        .select("medicine_id, medicine_name, dosage_mg, pack_size")
-        .ilike("medicine_name", f"%{q}%")
-        .limit(20)
-        .execute()
-    )
+def search_medicines(
+    q: str, 
+    category: Optional[str] = None, 
+    limit: int = 20, 
+    offset: int = 0
+):
+    query = supabase.table("medicines").select("*").ilike("medicine_name", f"%{q}%")
+    
+    if category:
+        query = query.eq("category", category)
+        
+    response = query.range(offset, offset + limit - 1).execute()
+    
     return [
         Medicine(
             id=row["medicine_id"],
             name=row["medicine_name"],
             strength=f'{row["dosage_mg"]}mg',
             pack_size=f'{row["pack_size"]} units',
+            category=row.get("category") or "",
+            price=float(row["price"]) if row.get("price") else 0.0,
+            company=row.get("company") or "",
+            prescription_required=bool(row.get("prescription_required"))
         )
         for row in response.data
     ]
@@ -65,6 +87,10 @@ def compare_prices(medicine_id: str):
         name=row["medicine_name"],
         strength=f'{row["dosage_mg"]}mg',
         pack_size=f'{row["pack_size"]} units',
+        category=row.get("category") or "",
+        price=float(row["price"]) if row.get("price") else 0.0,
+        company=row.get("company") or "",
+        prescription_required=bool(row.get("prescription_required"))
     )
 
     base_price = float(row["price"]) if row["price"] else 0.0
