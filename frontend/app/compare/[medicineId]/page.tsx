@@ -3,7 +3,18 @@
 import { use, useEffect, useState } from "react";
 import { ArrowLeft, Loader2, MapPin, Pill, Store, TrendingDown, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+
+const PriceMap = dynamic(() => import('../../components/PriceMap'), { 
+  ssr: false, 
+  loading: () => (
+    <div className="w-full h-[400px] border border-border/50 rounded-3xl overflow-hidden shadow-inner flex items-center justify-center bg-muted/20">
+      <Loader2 className="w-8 h-8 animate-spin text-primary opacity-50" />
+    </div>
+  ) 
+});
 
 interface Medicine {
   id: string;
@@ -32,16 +43,21 @@ interface CompareResult {
 export default function ComparePage({ params }: { params: Promise<{ medicineId: string }> }) {
   // Extract medicineId from the Promise params
   const { medicineId } = use(params);
+  const router = useRouter();
 
   const [result, setResult] = useState<CompareResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchCompare = async () => {
+    const fetchCompare = async (lat?: number, lon?: number) => {
       try {
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
-        const res = await fetch(`${baseUrl}/api/compare/${medicineId}`);
+        let url = `${baseUrl}/api/compare/${medicineId}`;
+        if (lat !== undefined && lon !== undefined) {
+          url += `?lat=${lat}&lon=${lon}`;
+        }
+        const res = await fetch(url);
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         
@@ -60,7 +76,20 @@ export default function ComparePage({ params }: { params: Promise<{ medicineId: 
       }
     };
 
-    fetchCompare();
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          fetchCompare(position.coords.latitude, position.coords.longitude);
+        },
+        (error) => {
+          console.warn("Geolocation denied or failed. Using fallback.", error);
+          fetchCompare();
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      fetchCompare();
+    }
   }, [medicineId]);
 
   if (isLoading) {
@@ -91,10 +120,10 @@ export default function ComparePage({ params }: { params: Promise<{ medicineId: 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8">
       {/* Back link */}
-      <Link href="javascript:history.back()" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
+      <button onClick={() => router.back()} className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors cursor-pointer bg-transparent border-none p-0">
         <ArrowLeft className="w-4 h-4 mr-1" />
         Back to results
-      </Link>
+      </button>
 
       {/* Header Info */}
       <div className="bg-card border border-border/50 rounded-3xl p-6 md:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between shadow-sm">
@@ -190,15 +219,7 @@ export default function ComparePage({ params }: { params: Promise<{ medicineId: 
         <div className="lg:col-span-1">
           <div className="sticky top-24">
             <h2 className="text-xl font-bold mb-4">Location</h2>
-            <div className="w-full h-[400px] bg-muted/30 border border-border/50 rounded-3xl overflow-hidden relative group">
-              {/* Map Placeholder */}
-              <div className="absolute inset-0 bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=18.5204,73.8567&zoom=14&size=600x400&scale=2&maptype=roadmap&style=feature:administrative%7Celement:labels.text.fill%7Ccolor:0x444444&style=feature:landscape%7Celement:all%7Ccolor:0xf2f2f2&key=INSERT_YOUR_KEY')] bg-cover bg-center opacity-40 blur-[2px] grayscale transition-all group-hover:grayscale-0 group-hover:blur-none duration-500"></div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/50 backdrop-blur-sm group-hover:opacity-0 transition-opacity duration-500">
-                <MapPin className="w-12 h-12 text-primary mb-3" />
-                <p className="font-semibold px-4 text-center">Interactive map will display pins for each pharmacy</p>
-                <p className="text-sm text-muted-foreground px-4 text-center mt-2">(Mapbox or Google Maps integration)</p>
-              </div>
-            </div>
+            <PriceMap prices={prices} />
             
             <div className="mt-6 p-4 rounded-2xl bg-sky-500/5 border border-sky-500/20 flex gap-3 text-sm text-sky-700 dark:text-sky-300">
                <AlertCircle className="shrink-0 w-5 h-5" />
