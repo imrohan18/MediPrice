@@ -1,0 +1,48 @@
+# MediPrice: Final Implementation Changes & Features
+
+This document serves as a comprehensive log of the features added and technical changes made to upgrade the MediPrice project from an incomplete placeholder MVP to a fully functional and impressive portfolio application.
+
+---
+
+## 🌟 1. Interactive Map Integration (Frontend)
+**Files Modified:** [frontend/app/components/PriceMap.tsx](file:///c:/Users/aryav/OneDrive/Desktop/MediPrice-main/frontend/app/components/PriceMap.tsx), [frontend/app/compare/[medicineId]/page.tsx](file:///c:/Users/aryav/OneDrive/Desktop/MediPrice-main/frontend/app/compare/%5BmedicineId%5D/page.tsx), [frontend/app/globals.css](file:///c:/Users/aryav/OneDrive/Desktop/MediPrice-main/frontend/app/globals.css)
+- **What was done:** Replaced the static background image on the Compare page with a fully interactive, pan-and-zoom Map powered by **React Leaflet** and **OpenStreetMap**. 
+- **Key details:**
+  - Used `next/dynamic` to ensure the map renders Exclusively on the client side, avoiding Next.js SSR crashes.
+  - Implemented custom SVG map markers (`L.divIcon`) to visually distinguish store prices: the cheapest pharmacy automatically lights up green, while the others remain red. 
+  - Added auto-scaling map bounds so all nearby pharmacies fit perfectly on the screen upon load.
+
+---
+
+## 📍 2. User Geolocation Integration (Full-Stack)
+**Files Modified:** [frontend/app/compare/[medicineId]/page.tsx](file:///c:/Users/aryav/OneDrive/Desktop/MediPrice-main/frontend/app/compare/%5BmedicineId%5D/page.tsx), [backend/routers/medicines.py](file:///c:/Users/aryav/OneDrive/Desktop/MediPrice-main/backend/routers/medicines.py)
+- **What was done:** Connected the application to the user's actual physical location.
+- **Key details:**
+  - **Frontend:** Used the browser's native `navigator.geolocation` API to ask the user for their exact GPS coordinates.
+  - **Backend Fallback:** If the browser denies geolocation or fails (common on localhost desktop), the backend securely pings an external IP Geolocation API (`ip-api.com`) to figure out the user's current State/City and centers the map locally, abandoning the hardcoded "Pune" default.
+
+---
+
+## 🗺️ 3. OpenStreetMap Real Pharmacy Fetching (Backend)
+**Files Modified:** [backend/routers/medicines.py](file:///c:/Users/aryav/OneDrive/Desktop/MediPrice-main/backend/routers/medicines.py)
+- **What was done:** Stopped using hard-coded dummy pharmacy names (like "Apollo Pharmacy") and integrated real-world data points.
+- **Key details:**
+  - Created a [fetch_real_pharmacies()](file:///c:/Users/aryav/OneDrive/Desktop/MediPrice-main/backend/routers/medicines.py#29-50) function utilizing the completely free **OpenStreetMap Overpass API**.
+  - The Python backend runs a radius query on the user's location to fetch the exact names of *actual registered pharmacies* (e.g. independently owned chemists or chains nearby), making the UX feel completely genuine.
+
+---
+
+## 🎲 4. Dynamic "Mock" Database & Real CSV Pricing (Backend)
+**Files Modified:** [backend/database.py](file:///c:/Users/aryav/OneDrive/Desktop/MediPrice-main/backend/database.py), [backend/routers/medicines.py](file:///c:/Users/aryav/OneDrive/Desktop/MediPrice-main/backend/routers/medicines.py)
+- **What was done:** Integrated the [medicine_price_dataset.csv](file:///c:/Users/aryav/OneDrive/Desktop/MediPrice-main/backend/medicine_price_dataset.csv) so the frontend can display real medicine prices even when the main Supabase database goes down.
+- **Key details:**
+  - Added a `try/except` block catching database fail states so that if `.env` keys are missing, the server falls back smoothly without crashing.
+  - Built a lightweight CSV parser inside the router that scans your local 5,000-row dataset at runtime.
+  - When you search for a medicine, the backend automatically cross-references your exact search query with the CSV dataset to provide **genuine, real baseline prices** for that medicine, making the mock pharmacies' calculations incredibly realistic.
+
+---
+
+## 🔧 5. Next.js Routing Security Fix (Frontend)
+**Files Modified:** [frontend/app/compare/[medicineId]/page.tsx](file:///c:/Users/aryav/OneDrive/Desktop/MediPrice-main/frontend/app/compare/%5BmedicineId%5D/page.tsx)
+- **What was done:** Fixed a React breaking error attempting to use `href="javascript:history.back()"` inside Next.js components.
+- **Key details:** Modernized the routing by replacing the faulty Link with an HTML `<button>` combined with the native `useRouter().back()` command from `next/navigation`.
