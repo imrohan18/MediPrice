@@ -126,27 +126,27 @@ export default function ComparePage({ params }: { params: Promise<{ medicineId: 
       </button>
 
       {/* Header Info */}
-      <div className="bg-card border border-border/50 rounded-3xl p-6 md:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between shadow-sm">
-        <div className="flex items-center space-x-5 mb-4 md:mb-0">
-          <div className="h-16 w-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
-            <Pill className="h-8 w-8" />
+      <div className="bg-card border border-border/50 rounded-3xl p-4 sm:p-6 md:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between shadow-sm gap-4 md:gap-0">
+        <div className="flex items-center space-x-4">
+          <div className="h-12 w-12 sm:h-16 sm:w-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0">
+            <Pill className="h-6 w-6 sm:h-8 sm:w-8" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 break-words">
               {medicine.name}
             </h1>
-            <p className="text-lg text-muted-foreground mt-1">
+            <p className="text-base sm:text-lg text-muted-foreground mt-1">
               {medicine.strength} • {medicine.pack_size}
             </p>
           </div>
         </div>
         
-        <div className="flex flex-col items-start md:items-end p-4 rounded-xl bg-primary/5 border border-primary/10">
+        <div className="flex flex-col items-start md:items-end p-3 sm:p-4 rounded-xl bg-primary/5 border border-primary/10">
           <p className="text-sm font-medium text-emerald-600 flex items-center mb-1">
             <TrendingDown className="w-4 h-4 mr-1" />
             Best Price Found
           </p>
-          <p className="text-3xl font-extrabold text-primary">
+          <p className="text-2xl sm:text-3xl font-extrabold text-primary">
             ₹{cheapestPrice.toFixed(2)}
           </p>
         </div>
@@ -156,7 +156,7 @@ export default function ComparePage({ params }: { params: Promise<{ medicineId: 
         
         {/* Price List */}
         <div className="lg:col-span-2 flex flex-col space-y-4">
-          <h2 className="text-xl font-bold mb-2">Available at {prices.length} Pharmacies</h2>
+          <h2 className="text-lg sm:text-xl font-bold mb-2">Available at {prices.length} Pharmacies</h2>
           
           <motion.div 
             initial="hidden"
@@ -217,8 +217,8 @@ export default function ComparePage({ params }: { params: Promise<{ medicineId: 
 
         {/* Map / Context Area */}
         <div className="lg:col-span-1">
-          <div className="sticky top-24">
-            <h2 className="text-xl font-bold mb-4">Location</h2>
+          <div className="lg:sticky lg:top-24">
+            <h2 className="text-lg sm:text-xl font-bold mb-4">Location</h2>
             <PriceMap prices={prices} />
             
             <div className="mt-6 p-4 rounded-2xl bg-sky-500/5 border border-sky-500/20 flex gap-3 text-sm text-sky-700 dark:text-sky-300">
