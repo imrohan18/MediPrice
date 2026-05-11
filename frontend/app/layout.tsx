@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ScrollButtons from './components/ScrollButtons';
+import CursorGlow from "./components/CursorGlow";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +35,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background selection:bg-primary/20">
         <Header />
         <main className="flex-1 flex flex-col pt-20">{children}</main>
-        <Footer />
+        <Footer />  
+        <ScrollButtons />
+         <CursorGlow />
       </body>
     </html>
   );
