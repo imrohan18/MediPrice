@@ -66,7 +66,7 @@ function StatCounter({ value, suffix = "" }: { value: number; suffix?: string })
   }, [isInView, value]);
 
   return (
-    <span ref={ref} className="text-4xl font-extrabold text-foreground tabular-nums">
+    <span ref={ref} className="text-3xl font-extrabold text-foreground tabular-nums sm:text-4xl">
       {count.toLocaleString()}
       {suffix}
     </span>
@@ -227,7 +227,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mb-6 text-5xl font-extrabold leading-[1.1] tracking-tight text-foreground md:text-7xl"
+            className="mb-6 text-4xl font-extrabold leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-7xl"
           >
             Never Overpay for
             <br />
@@ -300,7 +300,7 @@ export default function Home() {
       {/* ══ STATS STRIP ══ */}
       <section className="border-y border-border/50 bg-muted/25 py-12">
         <div className="container mx-auto max-w-7xl px-4">
-          <AnimatedSection className="grid grid-cols-2 gap-8 md:grid-cols-4">
+          <AnimatedSection className="grid grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4">
             {[
               { value: 500, label: "Pharmacies Listed", suffix: "+" },
               { value: 12000, label: "Medicines Tracked", suffix: "+" },
@@ -323,7 +323,7 @@ export default function Home() {
             <motion.p variants={fadeUp} className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
               How It Works
             </motion.p>
-            <motion.h2 variants={fadeUp} className="mb-4 text-3xl font-extrabold tracking-tight text-foreground md:text-5xl">
+            <motion.h2 variants={fadeUp} className="mb-4 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl md:text-5xl">
               Three steps to big savings
             </motion.h2>
             <motion.p variants={fadeUp} className="mx-auto max-w-xl text-lg text-muted-foreground">
@@ -359,7 +359,7 @@ export default function Home() {
             {/* Left copy */}
             <motion.div variants={fadeUp}>
               <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">Why MediPrice</p>
-              <h2 className="mb-6 text-3xl font-extrabold tracking-tight text-foreground md:text-5xl">
+              <h2 className="mb-6 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl md:text-5xl">
                 Built for patients,
                 <br />
                 not profit
@@ -416,7 +416,7 @@ export default function Home() {
             <motion.p variants={fadeUp} className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
               Testimonials
             </motion.p>
-            <motion.h2 variants={fadeUp} className="text-3xl font-extrabold tracking-tight text-foreground md:text-5xl">
+              <motion.h2 variants={fadeUp} className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl md:text-5xl">
               Trusted by real patients
             </motion.h2>
           </AnimatedSection>
@@ -458,7 +458,7 @@ export default function Home() {
             <motion.p variants={fadeUp} className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
               FAQ
             </motion.p>
-            <motion.h2 variants={fadeUp} className="text-3xl font-extrabold tracking-tight text-foreground md:text-5xl">
+            <motion.h2 variants={fadeUp} className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl md:text-5xl">
               Common questions
             </motion.h2>
           </AnimatedSection>
@@ -485,7 +485,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.55 }}
-            className="relative overflow-hidden rounded-3xl bg-linear-to-br from-primary via-emerald-500 to-teal-500 p-12 text-center md:p-20"
+            className="relative overflow-hidden rounded-3xl bg-linear-to-br from-primary via-emerald-500 to-teal-500 p-8 text-center sm:p-12 md:p-20"
           >
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.15)_0%,transparent_60%)]" />
             <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-white/5 blur-2xl" />
@@ -494,16 +494,16 @@ export default function Home() {
               <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20">
                 <Heart className="h-8 w-8 text-white" />
               </div>
-              <h2 className="mb-4 text-3xl font-extrabold text-white md:text-5xl">
+              <h2 className="mb-4 text-2xl font-extrabold text-white sm:text-3xl md:text-5xl">
                 Start saving today
               </h2>
-              <p className="mx-auto mb-10 max-w-xl text-lg text-white/80">
+              <p className="mx-auto mb-8 max-w-xl text-base text-white/80 sm:text-lg sm:mb-10">
                 Join thousands of patients who've already cut their prescription costs with MediPrice.
                 It takes seconds.
               </p>
               <Link
                 href="/search"
-                className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-lg font-bold text-primary shadow-xl transition-transform hover:scale-105 active:scale-95"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-base font-bold text-primary shadow-xl transition-transform hover:scale-105 active:scale-95 sm:px-8 sm:py-4 sm:text-lg"
               >
                 Search for a medicine <ArrowRight className="h-5 w-5" />
               </Link>

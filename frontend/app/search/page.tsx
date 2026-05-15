@@ -46,8 +46,8 @@ function SearchContent() {
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Search Results</h1>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Search Results</h1>
         <p className="text-muted-foreground">
           Showing results for <span className="font-semibold text-foreground">"{query}"</span>
         </p>
@@ -99,13 +99,13 @@ function SearchContent() {
               }}
             >
               <Link href={`/compare/${med.id}`}>
-                <div className="group flex items-center justify-between p-6 rounded-2xl border border-border/50 bg-card transition-all hover:border-primary/40 hover:shadow-md cursor-pointer">
-                  <div className="flex items-center space-x-4">
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                      <Pill className="h-6 w-6" />
+        <div className="group flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-6 rounded-2xl border border-border/50 bg-card transition-all hover:border-primary/40 hover:shadow-md cursor-pointer gap-3 sm:gap-0">
+                  <div className="flex items-center space-x-3 sm:space-x-4">
+                    <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform shrink-0">
+                      <Pill className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                      <h2 className="text-lg sm:text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
                         {med.name}
                       </h2>
                       <p className="text-sm text-muted-foreground">
@@ -113,8 +113,8 @@ function SearchContent() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center text-muted-foreground group-hover:text-primary transition-colors">
-                    <span className="mr-2 text-sm font-medium">Compare Prices</span>
+                  <div className="flex items-center text-muted-foreground group-hover:text-primary transition-colors self-end sm:self-auto">
+                    <span className="mr-2 text-sm font-medium hidden xs:inline sm:inline">Compare Prices</span>
                     <ChevronRight className="w-5 h-5" />
                   </div>
                 </div>
