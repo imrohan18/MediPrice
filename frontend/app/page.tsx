@@ -8,6 +8,7 @@ import {
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
+import ScrollButtons from './components/ScrollButtons';
 
 /* ─── Animation Variants ─── */
 const fadeUp = {
