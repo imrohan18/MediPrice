@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ScrollButtons from './components/ScrollButtons';
+
+import ScrollButtons from "./components/ScrollButtons";
 import CursorGlow from "./components/CursorGlow";
+import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,14 +22,11 @@ export const metadata: Metadata = {
   description: "Compare prescription prices across nearby pharmacies instantly.",
 };
 
-import { Header } from "./components/Header";
-import { Footer } from "./components/Footer";
-
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
       lang="en"
@@ -34,10 +34,16 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background selection:bg-primary/20">
         <Header />
-        <main className="flex-1 flex flex-col pt-20">{children}</main>
-        <Footer />  
+
+        <main className="flex-1 flex flex-col pt-20 sm:pt-20">
+          {children}
+        </main>
+
+        <Footer />
+
+        {/* UI Enhancements */}
         <ScrollButtons />
-         <CursorGlow />
+        <CursorGlow />
       </body>
     </html>
   );
